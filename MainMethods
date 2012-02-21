@@ -1,0 +1,176 @@
+	
+	GraphMaker
+	
+	public static void main(String [] args){
+		GraphMaker test = new GraphMaker();
+		test.readFile("src/roadSet1Formatted.txt");
+		test.saveFile(map);
+		test.setIsect(map);
+	}
+	
+	ShortestPath
+		public static void main(String [] args){
+		GraphMaker test = new GraphMaker();
+		test.readFile("src/roadSet1Formatted.txt");
+		test.setIsect(test.map);
+		
+		IntersectionI s = new Intersection();
+		IntersectionI e = new Intersection();
+		for(IntersectionI h : test.isect){
+			s = h;
+		}
+		
+		ShortestPath test2 = new ShortestPath();
+		test2.current.setValue(s);
+		
+		test2.current.setPrevious(null);
+		test2.current.setCost(0);
+		
+		
+		test2.open.add(test2.current);
+		Vertex temp = test2.new Vertex();
+		temp = test2.current;
+		
+		System.out.println(test2.open.contains(temp));
+		test2.current.setValue(e);
+		System.out.println(test2.open.contains(temp));
+	}
+	
+
+		-------------------------------------------------
+	//	    public boolean isConnected(Point a, Point b) {
+	//	        Set<HashMap<Point, StreetI>> adjacent = map.get(a);
+	//	        if(adjacent==null) {
+	//	            return false;
+	//	        }
+	//	        return adjacent.contains(b);
+	//	    }
+		--------------------------------------
+		    // Kruskal's algorithm
+    public Kruskal(List<IntersectionI> isect) {
+    	//Add edges
+    	for(IntersectionI: isect.iterator())
+        // more efficient to build heap by passing array of edges
+        BinaryMinHeap<Vertex> pq = new BinaryMinHeap<Vertex>();
+        for (Edge e : G.edges()) {
+            pq.insert(e);
+        }
+
+        // run greedy algorithm
+        UF uf = new UF(G.V());
+        while (!pq.isEmpty() && mst.size() < G.V() - 1) {
+            Edge e = pq.delMin();
+            int v = e.either();
+            int w = e.other(v);
+            if (!uf.connected(v, w)) { // v-w does not create a cycle
+                uf.union(v, w);  // merge v and w components
+                mst.enqueue(e);  // add edge e to mst
+                weight += e.weight();
+            }
+        }
+
+        // check optimality conditions
+        assert check(G);
+    }
+		-------------------------------------------------
+		 class Edge implements Comparable<Edge>{
+    	double weight;
+    	Point a;
+    	Point b;
+    	
+		public double getWeight() {
+			return weight;
+		}
+
+		public void setWeight(double weight) {
+			this.weight = weight;
+		}
+
+		public Point getA() {
+			return a;
+		}
+
+		public void setA(Point a) {
+			this.a = a;
+		}
+
+		public Point getB() {
+			return b;
+		}
+
+		public void setB(Point b) {
+			this.b = b;
+		}
+
+		public int compareTo(Edge o) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+    	
+    }
+    
+    -------------------------------------------------------------------------------------------------------------
+    public List<IntersectionI> MST(HashSet<StreetI> streets, HashMap<Point, IntersectionI> isect, Map<Point, HashMap<Point, StreetI>> map){
+    	PriorityQueue<StreetI> spq = new PriorityQueue<StreetI>(streets.size(), scomp);
+    	HashSet<StreetI> mst = new HashSet<StreetI>();
+    	HashMap<Point, IntersectionI> conn = new HashMap<Point, IntersectionI>();
+    	
+    	//Creates a priority list to remove min of streets
+    	for(StreetI s: streets){
+    		spq.add(s);
+    	}
+    	
+    	//Makes a list that indicated whether two points are connected
+    	for(Point p: map.keySet()){
+    		IntersectionI temp = new Intersection();
+    		temp.setPointOfIntersection(p);
+    		conn.put(p, temp);
+    	}
+    	
+
+        while (!spq.isEmpty()) {
+            StreetI current = spq.poll();
+            Point a = current.getFirstPoint();
+            Point b = current.getSecondPoint();
+            //If it doesn't create a cycle
+            if (conn.get(a).isConnected(conn.get(b)) == null){
+            	mst.add(current);
+            	//add street to a's street list
+            	
+            	List<StreetI> tempa = new ArrayList<StreetI>();
+            	tempa = conn.get(a).getStreetList();
+            	System.out.println("New Street");
+            	System.out.println("Current:");
+            	for(StreetI s: tempa){
+            		System.out.println(s.getIdNumber());
+            	}
+            	tempa.add(current);
+            	System.out.println("Add:");
+            	System.out.println(current.getIdNumber());
+            	System.out.println("Updated:");
+            	for(StreetI s: tempa){
+            		System.out.println(s.getIdNumber());
+            	}
+            	
+            	System.out.println("");
+            	
+            	//modify intersection and add back onto connected map
+            	IntersectionI tempia = new Intersection();
+            	tempia.setPointOfIntersection(a);
+            	tempia.setStreetList(tempa);
+            	conn.put(a, tempia);
+            	
+            	//add street to b's street list
+            	List<StreetI> tempb = new ArrayList<StreetI>();
+            	tempb = conn.get(b).getStreetList();
+            	tempb.add(current);
+            	//modify intersection and add back onto connected map
+            	IntersectionI tempib = new Intersection();
+            	tempib.setPointOfIntersection(b);
+            	tempib.setStreetList(tempb);
+            	conn.put(b, tempib);
+            }
+        }
+        return mstlist(mst, isect);
+    	
+    }

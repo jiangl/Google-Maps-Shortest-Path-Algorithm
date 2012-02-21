@@ -1,0 +1,24 @@
+h1{
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+	}
+h2.subTitle{
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+	}
+#studentName{
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+	font-style: italic;
+	}
+div.map{
+	width: 750px;
+	height: 450px;
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+	border: 1px solid black
+	}
